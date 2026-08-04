@@ -31,3 +31,7 @@ class VKSenderRateLimitError(VKSenderAPIError):
 
     def __init__(self, message: str = 'Превышен лимит запросов VK API'):
         super().__init__(message, status_code=429)
+
+
+class QueueOverflowError(VKSenderError):
+    """Очередь переполнена."""

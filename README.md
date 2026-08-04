@@ -29,7 +29,7 @@ uv add git+https://github.com/karlos-perez/vk-sender.git@main
 pip install git+https://github.com/karlos-perez/vk-sender.git@main
 ```
 
-## 2. Подключите приложение
+## 2. Подключение в приложение Django
 В `settings.py`:
 
 ```python
@@ -38,10 +38,7 @@ INSTALLED_APPS = [
     'vk_sender',
     ...
 ]
-```
 
-## 3. Добавьте настройки
-```python
 VK_SENDER = {
     "ADMINS": [
         {"name": "Главный админ", "vk_user_id": 123456789},
@@ -53,16 +50,52 @@ VK_SENDER = {
         "API_VERSION": "5.199",
         "GROUP_ID": 12345678,  # необязательно
     },
+    
+    # Настройки Redis для очереди уведомлений
+    'RQ_QUEUES': {
+        'notifications_send': {  # имя очереди (используется в RQ)
+            'HOST': 'localhost',  # хост Redis (или из переменных окружения)
+            'PORT': 6379,  # порт Redis
+            'DB': 1,  # номер базы данных (изолирует данные от остальных)
+            'DEFAULT_TIMEOUT': 60,  # таймаут выполнения задачи в секундах
+        },
+    },
 }
 ```
 
-## 4. Использование
+Запуск воркера:
+
+```python
+# Постоянный воркер
+python manage.py rqworker --queue=notifications_send
+
+# Обработать всё и выйти (для cron)
+python manage.py rqworker --burst
+```
+_* очередь по-умолчанию: vk_sender_
+
+Добавить в _docker-compose.yml_ или предпочтительней в _entrypoint.sh_:
+
+```shell
+#!/bin/bash
+set -e
+
+# ... миграции, сбор статики ...
+
+# Запускаем воркер в фоне
+python manage.py rqworker --queue=notifications_send &
+
+# Запускаем uWSGI
+uwsgi --ini .../uwsgi.ini
+```
+
+## 3. Использование
 Основная функция
 
 ```python
-from vk_sender import send_notification
+from vk_sender import send_notify
 
-send_notification(
+send_notify(
     text="CRITICAL: Приложение упало! Ошибка 500 на /api/orders/",
     level="critical",  # info | warning | error | critical
     extra={
@@ -73,7 +106,7 @@ send_notification(
 )
 ```
 
-## 5. Пример сообщения в VK
+## 4. Пример сообщения в VK
 
 ```
 🚨 CRITICAL #20260101_000001
@@ -85,13 +118,16 @@ CRITICAL: Приложение упало! Ошибка 500 на /api/orders/
 Пользователь: 456
 ```
 
-## 6. Настройка
+## 5. Настройка
 |Параметр|Описание
 |--|--|
 ADMINS|Список администраторов с vk_user_id
 VK.TOKEN|Дервисный ключ доступа VK
 VK.API_VERSION|Версия API (рекомендуется 5.199)
 VK.GROUP_ID*|ID группы для отправки от сообщества
+RQ_QUEUES|Настройки Redis для очереди уведомлений
+RQ_QUEUES.notifications_send|Имя очереди (используется в RQ)
+
 * необязательно
 
 
@@ -106,7 +142,7 @@ VK.GROUP_ID*|ID группы для отправки от сообщества
 > Сообщество в VK → раздел «Управление» → раздел «Дополнительно» → → раздел «Работа с API» → «Ключи доступа» → отметьте Сообщения.
 
 
-## 7. Проверка работы
+## 6. Проверка работы
 В подключенном и настроенном django приложении:
 ```bash
 $ python3 test_live.py
@@ -116,13 +152,13 @@ $ python3 test_live.py
 $ python3 test_live.py --user <vk_user_id> --token <vk_token>
 ```
 
-## 8. Дорожная карта
+## 7. Дорожная карта
 - Очередь для сообщений на основе `django-rq`
 - Расширенное форматирование сообщений (vkbottle)
 
-## 9. Требования
+## 8. Требования
 - Python ≥ 3.8
 - Django ≥ 3.2
 
-## 10. Лицензия
+## 9. Лицензия
 MIT License

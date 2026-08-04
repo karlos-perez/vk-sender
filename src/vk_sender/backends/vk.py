@@ -45,7 +45,7 @@ class VKBackend(BaseBackend):
                 if self._send_to_user(user_id, message):
                     success_count += 1
             except Exception as e:
-                logger.error(f'[VK Sender] Ошибка отправки пользователю {user_id}: {e}')
+                logger.error(f'[VK Sender] Ошибка отправки пользователю {user_id=}: {e}')
 
         return success_count > 0
 

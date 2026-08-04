@@ -3,7 +3,7 @@ name = "vk-sender"
 version = "0.1.0"
 description = "Простой модуль для отправки сообщений в ВКонтакте из Django"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
     {name = "Karlos-Perez", email = "kralole@gmail.com"},
@@ -20,6 +20,8 @@ classifiers = [
     "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -30,7 +32,8 @@ classifiers = [
 
 dependencies = [
     "django>=3.2",
-    "httpx>=0.27.0",
+    "httpx>=0.24.0",
+    "rq>=2.3.3",
 ]
 
 [dependency-groups]
