@@ -37,6 +37,12 @@ ignore = [
   "ANN204",  # __init__ может быть без -> None
   "UP006",   # Use `dict` instead of `Dict` for type annotation
   "UP045",   # Use `X | None` for type annotations
+  "RUF001",  # Docstring contains ambiguous `е`
+  "RUF002",  # Docstring contains ambiguous `е`
+  "RUF003",  # Docstring contains ambiguous `е`
+  "ANN002",  # Missing type annotation for `*args`
+  "ANN003",  # Missing type annotation for `**kwargs`
+  "PLR6301", # Method could be a function, class method, or static method
 ]
 preview = true
 

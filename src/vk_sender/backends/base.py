@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from datetime import datetime
 from typing import Any, Dict, Optional
-
-from django.utils import timezone
 
 
 class BaseBackend(ABC):
@@ -28,7 +27,7 @@ class BaseBackend(ABC):
     def format_message(self, text: str, level: str, extra: Optional[Dict[str, Any]] = None) -> str:
         """Базовое форматирование сообщения. Может быть переопределено в наследниках."""
         emoji = {
-            'info': 'ℹ️',  # noqa: RUF001
+            'info': 'ℹ️',
             'warning': '⚠️',
             'error': '❌',
             'critical': '🚨',
@@ -47,6 +46,5 @@ class BaseBackend(ABC):
     @staticmethod
     def _get_current_time() -> str:
         """Возвращает текущее время в читаемом формате."""
-        dt = timezone.localtime(timezone.now())
-
+        dt = datetime.now()  # локальное время сервера
         return f'#{dt.strftime("%Y%m%d_%H%M%S")}'
