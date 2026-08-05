@@ -25,8 +25,8 @@ class QueueManager:
     _MAX_QUEUE_SIZE: int = 1000
 
     def __init__(self, redis_url: str):
-        if self._instance is not None:
-            raise RuntimeError('QueueManager уже создан. Используйте QueueManager()')
+        if self._instance is not None and hasattr(self, '_redis_url'):
+            return
 
         self._redis_url = redis_url
         self._redis_conn: Optional[redis.Redis] = None
