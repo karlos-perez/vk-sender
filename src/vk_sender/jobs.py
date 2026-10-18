@@ -35,7 +35,7 @@ class JobContext:
         if self._backend is None:
             vk_config = {
                 'TOKEN': self.config.vk_token,
-                'ADMINS': [admin.vk_user_id for admin in self.config.admins],
+                'ADMINS': self.config.admins,
                 'API_VERSION': self.config.vk_api_version,
             }
             self._backend = VKBackend(vk_config)

@@ -37,15 +37,16 @@ class VKBackend(BaseBackend):
         success_count = 0
 
         for admin in admins:
-            user_id = admin.get('vk_user_id')
-            if not user_id:
+            admin_id = admin.vk_user_id
+
+            if not admin_id:
                 continue
 
             try:
-                if self._send_to_user(user_id, message):
+                if self._send_to_user(admin_id, message):
                     success_count += 1
             except Exception as e:
-                logger.error(f'[VK Sender] Ошибка отправки пользователю {user_id=}: {e}')
+                logger.error(f'[VK Sender] Ошибка отправки пользователю {admin_id=}: {e}')
 
         return success_count > 0
 
