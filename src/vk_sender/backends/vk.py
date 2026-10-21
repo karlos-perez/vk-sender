@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
@@ -26,7 +26,7 @@ class VKBackend(BaseBackend):
         if not self.token:
             raise VKSenderConfigError('VK.TOKEN не указан в настройках')
 
-    def send(self, text: str, level: str = 'info', extra: Optional[Dict[str, Any]] = None) -> bool:
+    def send(self, text: str, level: str = 'info', extra: Optional[Union[Dict[str, Any], List[str]]] = None) -> bool:
         """Отправляет сообщение указанным администраторам."""
         message = self.format_message(text, level, extra)
         admins = self.config.get('ADMINS', [])

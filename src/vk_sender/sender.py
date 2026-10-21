@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .jobs import send_notification_job
 from .queue import QueueManager
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def send_notify(
     text: str,
     level: str = 'info',
-    extra: Optional[Dict[str, Any]] = None,
+    extra: Optional[Union[Dict[str, Any], List[str]]] = None,
     fail_silently: bool = False,
 ) -> bool:
     """
