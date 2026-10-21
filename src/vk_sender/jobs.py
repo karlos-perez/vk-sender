@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .backends.vk import VKBackend
 from .config import ConfigApp
@@ -56,7 +56,7 @@ _context = JobContext()
 def send_notification_job(
     text: str,
     level: str = 'info',
-    extra: Optional[Dict[str, Any]] = None,
+    extra: Optional[Union[Dict[str, Any], List[str]]] = None,
 ) -> bool:
     """
     Задача для RQ-воркера.
@@ -68,7 +68,7 @@ def send_notification_job(
         return _context.backend.send(
             text=text,
             level=level,
-            extra=extra or {},
+            extra=extra,
         )
     except Exception as e:
         logger.error(f'Ошибка отправки уведомления: {e}', exc_info=True)
